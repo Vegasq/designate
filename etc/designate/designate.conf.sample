@@ -228,6 +228,20 @@ debug = False
 #pattern = slave
 
 #-----------------------
+# Infoblox Backend
+#-----------------------
+[backend:infoblox]
+#infoblox_wapi = https://10.39.11.123/wapi/v1.4.1/
+#infoblox_username = admin
+#infoblox_password = infoblox
+#infoblox_sslverify = False
+#multi_tenant = True
+#infoblox_http_pool_connections =100
+#infoblox_http_pool_maxsize = 100
+#dns_view = default
+#net_view = default
+
+#-----------------------
 # Multi Backend
 #-----------------------
 [backend:multi]
