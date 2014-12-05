@@ -98,7 +98,7 @@ class Infoblox(object):
         """
         Retrieve a list of Infoblox objects of type 'objtype'
         Args:
-            objtype  (str): Infoblox object type, e.g. 'network', 'range', etc.
+            objtype  (str): Infoblox object type, e.g. 'view', 'tsig', etc.
             payload (dict): Payload with data to send
         Returns:
             A list of the Infoblox objects requested

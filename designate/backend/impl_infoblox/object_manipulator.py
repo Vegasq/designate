@@ -105,7 +105,6 @@ class InfobloxObjectManipulator(object):
             'zone_auth', {'fqdn': fqdn})
 
     def update_zone_auth(self, fqdn):
-        # TODO(nyakovlev) list of var for update
         self._update_infoblox_object(
             'zone_auth', {'fqdn': fqdn}, {})
 
