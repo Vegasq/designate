@@ -13,7 +13,6 @@ LOG = logging.getLogger(__name__)
 
 class CNameRecord(base.DNSRecord):
     def create(self, recordset, record=None):
-        ip = record.to_primitive()
 
         attrs = {}
         attrs.update(self._create_ttl_attr(recordset))
@@ -21,7 +20,7 @@ class CNameRecord(base.DNSRecord):
         payload = {
             'view': self._get_dns_view(),
             'name': recordset.name[0:-1],
-            'canonical': ip['designate_object.data']['data'][0:-1],
+            'canonical': record.data[0:-1],
             'comment': self._get_id(recordset, record)
         }
 
@@ -35,9 +34,8 @@ class CNameRecord(base.DNSRecord):
             self._update_infoblox_recordset(recordset, record)
 
     def _update_infoblox_record(self, recordset, record):
-        ip = record.to_primitive()
         update = {
-            'canonical': ip['designate_object.data']['data'][0:-1]
+            'canonical': record.data[0:-1]
         }
 
         request = {
@@ -48,10 +46,9 @@ class CNameRecord(base.DNSRecord):
         self.infoblox._update_infoblox_object('record:cname', request, update)
 
     def _update_infoblox_recordset(self, recordset, record):
-        rs = recordset.to_primitive()
         for record in recordset.records:
             update = {
-                'name': rs['designate_object.data']['name'][0:-1]
+                'name': recordset.name[0:-1]
             }
             update.update(self._create_ttl_attr(recordset))
 

@@ -23,16 +23,14 @@ class AAAARecord(base.DNSRecord):
         }
 
         if record:
-            ip = record.to_primitive()
-            payload['ipv6addr'] = ip['designate_object.data']['data']
+            payload['ipv6addr'] = record.data
 
         self.infoblox._create_infoblox_object('record:aaaa', payload, attrs,
                                               check_if_exists=True)
 
     def _update_infoblox_record(self, recordset, record):
-        ip = record.to_primitive()
         update = {
-            'ipv6addr': ip['designate_object.data']['data']
+            'ipv6addr': record.data
         }
 
         request = {
@@ -43,13 +41,12 @@ class AAAARecord(base.DNSRecord):
         self.infoblox._update_infoblox_object('record:aaaa', request, update)
 
     def _update_infoblox_recordset(self, recordset):
-        rs = recordset.to_primitive()
         for record in recordset.records:
             if not record:
                 continue
 
             update = {
-                'name': rs['designate_object.data']['name'][0:-1]
+                'name': recordset.name[0:-1]
             }
             update.update(self._create_ttl_attr(recordset))
 

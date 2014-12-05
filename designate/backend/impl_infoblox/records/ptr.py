@@ -21,16 +21,13 @@ class PTRRecord(base.DNSRecord):
         return ".".join(octets) + '.in-addr.arpa'
 
     def create(self, recordset, record):
-        ip = record.to_primitive()
-
         attrs = {}
         attrs.update(self._create_ttl_attr(recordset))
 
         payload = {
             'view': self._get_dns_view(),
             'name': recordset.name[0:-1],
-            'ptrdname': self._create_reverse_mapping_name(
-                ip['designate_object.data']['data']),
+            'ptrdname': self._create_reverse_mapping_name(record.data),
             'comment': self._get_id(recordset, record)
         }
 
@@ -38,10 +35,8 @@ class PTRRecord(base.DNSRecord):
                                      check_if_exists=True)
 
     def _update_infoblox_record(self, recordset, record):
-        ip = record.to_primitive()
         update = {
-            'ptrdname': self._create_reverse_mapping_name(
-                ip['designate_object.data']['data']),
+            'ptrdname': self._create_reverse_mapping_name(record.data),
         }
 
         request = {
@@ -52,10 +47,9 @@ class PTRRecord(base.DNSRecord):
         self.infoblox._update_infoblox_object('record:ptr', request, update)
 
     def _update_infoblox_recordset(self, recordset):
-        rs = recordset.to_primitive()
         for record in recordset.records:
             update = {
-                'name': rs['designate_object.data']['name'][0:-1]
+                'name': recordset.name[0:-1]
             }
             update.update(self._create_ttl_attr(recordset))
 
